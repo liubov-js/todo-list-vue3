@@ -1,19 +1,44 @@
 <template>
   <div class="card">
-    <img alt="Logo" src="../assets/Illustration.png" class="logo" />
-    <h1>Today I need to</h1>
-    <input placeholder="Add new todo..." class="todo-input" />
-    <NoTasks />
+    <div class="container">
+      <img alt="Logo" src="../assets/Illustration.svg" class="logo" />
+      <h1>Today I need to</h1>
+      <NewTodoBlock @create="createTask" />
+      <div class="todo-list">
+        <TodoItem :todo="todo" v-for="todo in todoList" v-bind:key="todo.id" />
+      </div>
+      <div class="indicators" v-if="todoList.length > 0">
+        <TaskIndicator :taskAmount="todoList.length" status="Completed" />
+        <TaskIndicator :taskAmount="todoList.length" status="To be finished" />
+      </div>
+      <NoTasks v-if="todoList.length === 0" />
+    </div>
   </div>
 </template>
 
 <script>
 import NoTasks from "./NoTasks.vue";
+import NewTodoBlock from "./NewTodoBlock.vue";
+import TodoItem from "./TodoItem.vue";
+import TaskIndicator from "./TaskIndicator";
 
 export default {
   name: "MainCard",
   components: {
     NoTasks,
+    NewTodoBlock,
+    TodoItem,
+    TaskIndicator,
+  },
+  data() {
+    return {
+      todoList: [],
+    };
+  },
+  methods: {
+    createTask(todo) {
+      this.todoList.push(todo);
+    },
   },
 };
 </script>
@@ -25,6 +50,12 @@ export default {
   height: 719px;
   border-radius: 24px;
   position: absolute;
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  width: 410px;
 }
 
 .logo {
@@ -41,12 +72,17 @@ h1 {
   margin: 48px 0 0;
 }
 
-.todo-input {
-  margin-top: 52px;
-  width: 317px;
-  border-radius: 8px;
-  border: 1px solid #c7ccd1;
-  padding: 12px;
-  font-size: 14px;
+.todo-list {
+  height: 85px;
+  width: 410px;
+  margin: 0 auto;
+  margin-top: 40px;
+  overflow: scroll;
+}
+
+.indicators {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 32px;
 }
 </style>

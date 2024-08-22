@@ -14,6 +14,15 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.no-tasks-container {
+  bottom: 32px;
+  position: absolute;
+  width: inherit;
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+}
+
 .no-tasks {
   display: flex;
   align-items: center;
