@@ -14,8 +14,11 @@
         />
       </div>
       <div class="indicators" v-if="todoList.length > 0">
-        <TaskIndicator :taskAmount="todoList.length" status="Completed" />
-        <TaskIndicator :taskAmount="todoList.length" status="To be finished" />
+        <TaskIndicator :taskAmount="counterCompletedTasks" status="Completed" />
+        <TaskIndicator
+          :taskAmount="todoList.length - counterCompletedTasks"
+          status="To be finished"
+        />
       </div>
       <NoTasks v-if="todoList.length === 0" />
     </div>
@@ -39,6 +42,7 @@ export default {
   data() {
     return {
       todoList: [],
+      counterCompletedTasks: 0,
     };
   },
   methods: {
@@ -46,11 +50,24 @@ export default {
       this.todoList.push(todo);
     },
     removeTask(todo) {
+      const currentTask = this.todoList.find((t) => t.id === todo.id);
+
+      if (currentTask.isCompleted) {
+        this.counterCompletedTasks -= 1;
+      }
+
       this.todoList = this.todoList.filter((t) => t.id !== todo.id);
     },
     toggleComplete(e, todo) {
+      console.log(e.target.checked);
       const currentTask = this.todoList.find((t) => t.id === todo.id);
       currentTask.isCompleted = e.target.checked;
+
+      if (e.target.checked) {
+        this.counterCompletedTasks += 1;
+      } else {
+        this.counterCompletedTasks -= 1;
+      }
     },
   },
 };
