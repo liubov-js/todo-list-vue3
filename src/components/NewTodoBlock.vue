@@ -6,22 +6,18 @@
       v-model="todo.task"
       @keyup.enter="createTask"
     />
-    <CustomButton v-if="todo.task" @click="createTask" />
+    <CustomButton v-if="todo.task" @click="createTask">Submit</CustomButton>
   </div>
 </template>
 
 <script>
-import CustomButton from "./CustomButton.vue";
-
 export default {
   name: "NewTodoBlock",
-  components: {
-    CustomButton,
-  },
   data() {
     return {
       todo: {
         task: "",
+        isCompleted: false,
       },
     };
   },
@@ -31,6 +27,7 @@ export default {
       this.$emit("create", this.todo);
       this.todo = {
         task: "",
+        isCompleted: false,
       };
     },
   },

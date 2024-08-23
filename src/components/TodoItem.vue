@@ -1,12 +1,21 @@
 <template>
   <div class="todo-item">
     <div>
-      <input type="checkbox" />
+      <input
+        type="checkbox"
+        :checked="todo.isCompleted"
+        @change="(e) => $emit('toggleComplete', e, todo)"
+      />
       <span class="todo-text">{{ todo.task }}</span>
     </div>
     <div>
       <img alt="Edit" src="../assets/pencil.svg" class="pencil-icon" />
-      <img alt="Delete" src="../assets/bin.svg" class="bin-icon" />
+      <img
+        alt="Delete"
+        src="../assets/bin.svg"
+        class="bin-icon"
+        @click="$emit('remove', todo)"
+      />
     </div>
   </div>
 </template>

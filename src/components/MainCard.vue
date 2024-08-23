@@ -5,7 +5,13 @@
       <h1>Today I need to</h1>
       <NewTodoBlock @create="createTask" />
       <div class="todo-list">
-        <TodoItem :todo="todo" v-for="todo in todoList" v-bind:key="todo.id" />
+        <TodoItem
+          :todo="todo"
+          v-for="todo in todoList"
+          v-bind:key="todo.id"
+          @remove="removeTask"
+          @toggleComplete="toggleComplete"
+        />
       </div>
       <div class="indicators" v-if="todoList.length > 0">
         <TaskIndicator :taskAmount="todoList.length" status="Completed" />
@@ -38,6 +44,13 @@ export default {
   methods: {
     createTask(todo) {
       this.todoList.push(todo);
+    },
+    removeTask(todo) {
+      this.todoList = this.todoList.filter((t) => t.id !== todo.id);
+    },
+    toggleComplete(e, todo) {
+      const currentTask = this.todoList.find((t) => t.id === todo.id);
+      currentTask.isCompleted = e.target.checked;
     },
   },
 };
