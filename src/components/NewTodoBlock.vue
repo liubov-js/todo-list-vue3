@@ -6,7 +6,12 @@
       v-model="todo.task"
       @keyup.enter="createTask"
     />
-    <CustomButton v-if="todo.task" @click="createTask">Submit</CustomButton>
+    <CustomButton
+      class="btn__active p-12-16 ml-16"
+      v-if="todo.task"
+      @click="createTask"
+      >Submit</CustomButton
+    >
   </div>
 </template>
 
@@ -42,5 +47,13 @@ export default {
   border: 1px solid #c7ccd1;
   padding: 12px;
   font-size: 14px;
+}
+
+.p-12-16 {
+  padding: 12px 16px;
+}
+
+.ml-16 {
+  margin-left: 16px;
 }
 </style>

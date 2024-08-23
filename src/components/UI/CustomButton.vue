@@ -12,15 +12,20 @@ export default {
 
 <style scoped lang="scss">
 .btn {
-  width: 77px;
-  height: 40px;
   border: none;
   border-radius: 8px;
-  color: #fff;
   font-size: 13px;
   font-weight: 600;
-  background-color: #2578f4;
-  margin-left: 16px;
   cursor: pointer;
+}
+
+.btn__active {
+  color: #fff;
+  background-color: #2578f4;
+}
+
+.btn__no-active {
+  color: #202427;
+  background-color: transparent;
 }
 </style>

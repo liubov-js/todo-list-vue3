@@ -7,7 +7,7 @@
       <div class="todo-list">
         <TodoItem
           :todo="todo"
-          v-for="todo in todoList"
+          v-for="todo in filteredTodos"
           v-bind:key="todo.id"
           @remove="removeTask"
           @toggleComplete="toggleComplete"
@@ -19,6 +19,54 @@
           :taskAmount="todoList.length - counterCompletedTasks"
           status="To be finished"
         />
+      </div>
+      <div class="btns" v-if="todoList.length > 0">
+        <CustomButton
+          v-if="todoList.length > counterCompletedTasks"
+          class="btn__no-active p-8-12"
+          @click="checkAll"
+          >Check all</CustomButton
+        >
+        <div class="filter-btns">
+          <CustomButton
+            class="p-8-12"
+            :class="filteredCondition === '' ? 'btn__active' : 'btn__no-active'"
+            @click="showAll"
+            >All</CustomButton
+          >
+          <CustomButton
+            v-if="
+              counterCompletedTasks > 0 &&
+              counterCompletedTasks < todoList.length
+            "
+            class="p-8-12"
+            :class="
+              filteredCondition === 'active' ? 'btn__active' : 'btn__no-active'
+            "
+            @click="showActive"
+            >Active</CustomButton
+          >
+          <CustomButton
+            v-if="
+              counterCompletedTasks > 0 &&
+              counterCompletedTasks < todoList.length
+            "
+            class="p-8-12"
+            :class="
+              filteredCondition === 'completed'
+                ? 'btn__active'
+                : 'btn__no-active'
+            "
+            @click="showCompleted"
+            >Complited</CustomButton
+          >
+        </div>
+        <CustomButton
+          v-if="counterCompletedTasks > 0"
+          class="btn__no-active p-8-12"
+          @click="clearCompleted"
+          >Clear complited</CustomButton
+        >
       </div>
       <NoTasks v-if="todoList.length === 0" />
     </div>
@@ -43,6 +91,7 @@ export default {
     return {
       todoList: [],
       counterCompletedTasks: 0,
+      filteredCondition: "",
     };
   },
   methods: {
@@ -59,7 +108,6 @@ export default {
       this.todoList = this.todoList.filter((t) => t.id !== todo.id);
     },
     toggleComplete(e, todo) {
-      console.log(e.target.checked);
       const currentTask = this.todoList.find((t) => t.id === todo.id);
       currentTask.isCompleted = e.target.checked;
 
@@ -67,6 +115,37 @@ export default {
         this.counterCompletedTasks += 1;
       } else {
         this.counterCompletedTasks -= 1;
+      }
+    },
+    checkAll() {
+      this.todoList.forEach((todo) => (todo.isCompleted = true));
+      this.counterCompletedTasks = this.todoList.length;
+    },
+    clearCompleted() {
+      this.todoList = this.todoList.filter(
+        (todo) => todo.isCompleted === false
+      );
+      this.counterCompletedTasks = 0;
+    },
+    showAll() {
+      this.filteredCondition = "";
+    },
+    showActive() {
+      this.filteredCondition = "active";
+    },
+    showCompleted() {
+      this.filteredCondition = "completed";
+    },
+  },
+  computed: {
+    filteredTodos() {
+      switch (this.filteredCondition) {
+        case "active":
+          return [...this.todoList].filter((todo) => !todo.isCompleted);
+        case "completed":
+          return [...this.todoList].filter((todo) => todo.isCompleted);
+        default:
+          return this.todoList;
       }
     },
   },
@@ -114,5 +193,19 @@ h1 {
   display: flex;
   justify-content: space-between;
   margin-top: 32px;
+}
+
+.btns {
+  margin-top: 32px;
+  display: grid;
+  grid-template-columns: 88px auto 128px;
+}
+
+.p-8-12 {
+  padding: 8px 12px;
+}
+
+.filter-btns {
+  grid-column-start: 2;
 }
 </style>
