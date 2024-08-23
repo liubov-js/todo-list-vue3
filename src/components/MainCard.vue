@@ -4,7 +4,7 @@
       <img alt="Logo" src="../assets/Illustration.svg" class="logo" />
       <h1>Today I need to</h1>
       <NewTodoBlock @create="createTask" />
-      <div class="todo-list">
+      <div class="todo-list" v-if="!this.isTodosLoading">
         <TodoItem
           :todo="todo"
           v-for="todo in filteredTodos"
@@ -13,6 +13,7 @@
           @toggleComplete="toggleComplete"
         />
       </div>
+      <div v-else class="mt-20">Loading...</div>
       <div class="indicators" v-if="todoList.length > 0">
         <TaskIndicator :taskAmount="counterCompletedTasks" status="Completed" />
         <TaskIndicator
@@ -78,6 +79,7 @@ import NoTasks from "./NoTasks.vue";
 import NewTodoBlock from "./NewTodoBlock.vue";
 import TodoItem from "./TodoItem.vue";
 import TaskIndicator from "./TaskIndicator";
+import axios from "axios";
 
 export default {
   name: "MainCard",
@@ -92,11 +94,29 @@ export default {
       todoList: [],
       counterCompletedTasks: 0,
       filteredCondition: "",
+      isTodosLoading: false,
     };
   },
   methods: {
-    createTask(todo) {
-      this.todoList.push(todo);
+    async fetchTodos() {
+      try {
+        this.isTodosLoading = true;
+        const response = await axios.get(
+          "https://my-json-server.typicode.com/liubov-js/todo-list-vue3/todos"
+        );
+        this.todoList = response.data;
+      } catch (e) {
+        alert("Error fetching todos");
+      } finally {
+        this.isTodosLoading = false;
+      }
+    },
+    async createTask(todo) {
+      const response = await axios.post(
+        "https://my-json-server.typicode.com/liubov-js/todo-list-vue3/todos",
+        todo
+      );
+      this.todoList.push(response.data);
     },
     removeTask(todo) {
       const currentTask = this.todoList.find((t) => t.id === todo.id);
@@ -136,6 +156,9 @@ export default {
     showCompleted() {
       this.filteredCondition = "completed";
     },
+  },
+  mounted() {
+    this.fetchTodos();
   },
   computed: {
     filteredTodos() {
@@ -207,5 +230,9 @@ h1 {
 
 .filter-btns {
   grid-column-start: 2;
+}
+
+.mt-20 {
+  margin-top: 20px;
 }
 </style>
