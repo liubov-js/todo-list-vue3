@@ -101,10 +101,10 @@ export default {
     async fetchTodos() {
       try {
         this.isTodosLoading = true;
-        const response = await axios.get(
-          "https://my-json-server.typicode.com/liubov-js/todo-list-vue3/todos"
-        );
+        const response = await axios.get("http://localhost:3000/todos");
         this.todoList = response.data;
+        const completedTasks = this.todoList.filter((todo) => todo.isCompleted);
+        this.counterCompletedTasks = completedTasks.length;
       } catch (e) {
         alert("Error fetching todos");
       } finally {
@@ -112,39 +112,66 @@ export default {
       }
     },
     async createTask(todo) {
-      const response = await axios.post(
-        "https://my-json-server.typicode.com/liubov-js/todo-list-vue3/todos",
-        todo
-      );
-      this.todoList.push(response.data);
-    },
-    removeTask(todo) {
-      const currentTask = this.todoList.find((t) => t.id === todo.id);
-
-      if (currentTask.isCompleted) {
-        this.counterCompletedTasks -= 1;
-      }
-
-      this.todoList = this.todoList.filter((t) => t.id !== todo.id);
-    },
-    toggleComplete(e, todo) {
-      const currentTask = this.todoList.find((t) => t.id === todo.id);
-      currentTask.isCompleted = e.target.checked;
-
-      if (e.target.checked) {
-        this.counterCompletedTasks += 1;
-      } else {
-        this.counterCompletedTasks -= 1;
+      try {
+        await axios.post("http://localhost:3000/todos", todo);
+        this.fetchTodos();
+      } catch (e) {
+        alert("Error saving todo");
       }
     },
-    checkAll() {
-      this.todoList.forEach((todo) => (todo.isCompleted = true));
+    async removeTask(todo) {
+      try {
+        await axios.delete(`http://localhost:3000/todos/${todo.id}`);
+        this.fetchTodos();
+
+        if (todo.isCompleted) {
+          this.counterCompletedTasks -= 1;
+        }
+      } catch (e) {
+        alert("Error removing todo");
+      }
+    },
+    async toggleComplete(e, todo) {
+      try {
+        todo.isCompleted = e.target.checked;
+        await axios.put(`http://localhost:3000/todos/${todo.id}`, todo);
+        this.fetchTodos();
+
+        if (e.target.checked) {
+          this.counterCompletedTasks += 1;
+        } else {
+          this.counterCompletedTasks -= 1;
+        }
+      } catch (e) {
+        alert("Error saving todo");
+      }
+    },
+    async checkAll() {
+      for (let todo of this.todoList) {
+        if (!todo.isCompleted) {
+          try {
+            todo.isCompleted = true;
+            await axios.put(`http://localhost:3000/todos/${todo.id}`, todo);
+          } catch (e) {
+            alert("Error saving todo");
+          }
+        }
+      }
+      this.fetchTodos();
       this.counterCompletedTasks = this.todoList.length;
     },
-    clearCompleted() {
-      this.todoList = this.todoList.filter(
-        (todo) => todo.isCompleted === false
-      );
+    async clearCompleted() {
+      for (let todo of this.todoList) {
+        if (todo.isCompleted) {
+          try {
+            todo.isCompleted = true;
+            await axios.delete(`http://localhost:3000/todos/${todo.id}`);
+          } catch (e) {
+            alert("Error removing todo");
+          }
+        }
+      }
+      this.fetchTodos();
       this.counterCompletedTasks = 0;
     },
     showAll() {
