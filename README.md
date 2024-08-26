@@ -1,24 +1,27 @@
-# todo-list-vue3
+# Todo list (Vue3)
 
-## Project setup
+## Install dependencies
+
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+## Run server
+
+```
+node server.js
+```
+
+### Run project
+
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+Time spent 8hrs
 
-### Lints and fixes files
-```
-npm run lint
-```
+Future features:
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- dark theme
+- ability to drag and drop tasks
+- using Vuex or Pinia
