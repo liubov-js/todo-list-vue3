@@ -32,6 +32,7 @@ app.put('/todos/:id', (req, res) => {
     const db = JSON.parse(data);
     let currentTodo = db.todos.find(todo => todo.id === Number(req.params.id));
     currentTodo.isCompleted = req.body.isCompleted;
+    currentTodo.task = req.body.task;
     fs.writeFile('./db.json', JSON.stringify(db, null, 2), (err) => {
       if (err) res.status(500).send('Error saving data');
       res.status(200).send(req.body);

@@ -6,10 +6,23 @@
         :checked="todo.isCompleted"
         @change="(e) => $emit('toggleComplete', e, todo)"
       />
-      <span class="todo-text">{{ todo.task }}</span>
+      <span v-if="!isEditing" class="todo-text">{{ todo.task }}</span>
+      <input
+        v-if="isEditing"
+        type="text"
+        v-model="editedTask"
+        @keyup.enter="saveEdit"
+        @blur="saveEdit"
+        class="edit-input"
+      />
     </div>
     <div>
-      <img alt="Edit" src="../assets/pencil.svg" class="pencil-icon" />
+      <img
+        alt="Edit"
+        src="../assets/pencil.svg"
+        class="pencil-icon"
+        @click="toggleEdit"
+      />
       <img
         alt="Delete"
         src="../assets/bin.svg"
@@ -29,6 +42,30 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      isEditing: false,
+      editedTask: this.todo.task,
+    };
+  },
+  methods: {
+    toggleEdit() {
+      this.isEditing = !this.isEditing;
+      if (this.isEditing) {
+        this.editedTask = this.todo.task;
+      }
+    },
+    saveEdit() {
+      if (this.isEditing) {
+        this.isEditing = false;
+        if (this.editedTask.trim() !== "") {
+          this.$emit("edit", { ...this.todo, task: this.editedTask });
+        } else {
+          this.editedTask = this.todo.task;
+        }
+      }
+    },
+  },
 };
 </script>
 
@@ -40,6 +77,10 @@ export default {
 }
 
 .todo-text {
+  margin-left: 8px;
+}
+
+.edit-input {
   margin-left: 8px;
 }
 

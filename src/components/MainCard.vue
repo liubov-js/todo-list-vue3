@@ -11,6 +11,7 @@
           v-bind:key="todo.id"
           @remove="removeTask"
           @toggleComplete="toggleComplete"
+          @edit="editTask"
         />
       </div>
       <div v-else class="mt-20">Loading...</div>
@@ -134,6 +135,17 @@ export default {
         }
       } catch (e) {
         alert("Error removing todo");
+      }
+    },
+    async editTask(updatedTodo) {
+      try {
+        await axios.put(
+          `http://localhost:3000/todos/${updatedTodo.id}`,
+          updatedTodo
+        );
+        this.fetchTodos();
+      } catch (e) {
+        alert("Error saving todo");
       }
     },
     async toggleComplete(e, todo) {
