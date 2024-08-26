@@ -15,10 +15,15 @@
       </div>
       <div v-else class="mt-20">Loading...</div>
       <div class="indicators" v-if="todoList.length > 0">
-        <TaskIndicator :taskAmount="counterCompletedTasks" status="Completed" />
+        <TaskIndicator
+          :taskAmount="counterCompletedTasks"
+          status="Completed"
+          :allTasks="todoList.length"
+        />
         <TaskIndicator
           :taskAmount="todoList.length - counterCompletedTasks"
           status="To be finished"
+          :allTasks="todoList.length"
         />
       </div>
       <div class="btns" v-if="todoList.length > 0">

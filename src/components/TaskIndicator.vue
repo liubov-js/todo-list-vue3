@@ -2,7 +2,15 @@
   <div class="indicator">
     <div class="task-amount">{{ taskAmount }} tasks</div>
     <div class="status">{{ status }}</div>
-    <div class="progress-bar"></div>
+    <div class="progress-bar">
+      <div
+        class="progress-fill"
+        :style="{
+          width: progress + '%',
+          backgroundColor: this.status === 'Completed' ? '#5D5FEF' : '#EF5DA8',
+        }"
+      ></div>
+    </div>
   </div>
 </template>
 
@@ -17,6 +25,15 @@ export default {
     taskAmount: {
       type: Number,
       required: true,
+    },
+    allTasks: {
+      type: Number,
+      required: true,
+    },
+  },
+  computed: {
+    progress() {
+      return this.allTasks > 0 ? (this.taskAmount / this.allTasks) * 100 : 0;
     },
   },
 };
@@ -55,6 +72,13 @@ export default {
   background-color: rgba(32, 36, 39, 0.07);
   margin-top: 12px;
   margin-left: 16px;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s ease-in-out;
 }
 
 @media (max-width: 480px) {
