@@ -56,4 +56,18 @@ export default {
   margin-top: 12px;
   margin-left: 16px;
 }
+
+@media (max-width: 480px) {
+  .indicator {
+    width: 140px;
+  }
+
+  .status {
+    font-size: 15px;
+  }
+
+  .progress-bar {
+    width: 106px;
+  }
+}
 </style>

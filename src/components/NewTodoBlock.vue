@@ -56,4 +56,11 @@ export default {
 .ml-16 {
   margin-left: 16px;
 }
+
+@media (max-width: 480px) {
+  .todo-input {
+    margin-top: 38px;
+    width: 180px;
+  }
+}
 </style>

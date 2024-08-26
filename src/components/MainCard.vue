@@ -262,4 +262,47 @@ h1 {
 .mt-20 {
   margin-top: 20px;
 }
+
+@media (max-width: 480px) {
+  .card {
+    height: 640px;
+  }
+
+  .container {
+    width: 300px;
+  }
+
+  .logo {
+    width: 120px;
+    margin-top: 26px;
+  }
+
+  h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 28px 0 0;
+  }
+
+  .todo-list {
+    height: 85px;
+    width: 100%;
+    margin-top: 25px;
+    overflow: scroll;
+  }
+
+  .indicators {
+    margin-top: 26px;
+  }
+
+  .btns {
+    margin-top: 20px;
+    display: block;
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+    width: 100%;
+  }
+}
 </style>
